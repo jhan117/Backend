@@ -10,6 +10,9 @@ public enum ErrorCode {
     DUPLICATED_USERNAME(HttpStatus.CONFLICT, "Username already exists"),
     USER_NOTFOUND(HttpStatus.NOT_FOUND, "User not found"),
     PASSWORD_INCORRECT(HttpStatus.UNAUTHORIZED, "Password incorrect"),
+
+    UN_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "Unauthorized"),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "Access denied"),
     ;
     private HttpStatus status;
     private String message;

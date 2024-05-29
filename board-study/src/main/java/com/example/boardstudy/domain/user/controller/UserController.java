@@ -1,13 +1,16 @@
 package com.example.boardstudy.domain.user.controller;
 
-import com.example.boardstudy.domain.user.dto.LoginRequest;
-import com.example.boardstudy.domain.user.dto.LoginResponse;
-import com.example.boardstudy.domain.user.dto.SignUpRequest;
+import com.example.boardstudy.domain.user.dto.User.*;
+import com.example.boardstudy.domain.user.entity.User;
+import com.example.boardstudy.domain.user.entity.UserPrincipal;
 import com.example.boardstudy.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +32,30 @@ public class UserController {
         LoginResponse response = userService.login(request);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> me(@AuthenticationPrincipal UserPrincipal user){
+        UserDto response = userService.me(user.getUserId());
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/findAll")
+    public ResponseEntity<List<UserDto>> findAll(){
+        List<UserDto> response = userService.findAll();
+        return ResponseEntity.ok().body(response);
+    }
+
+    // username 수정
+    @PatchMapping()
+    public ResponseEntity<Void> update(@AuthenticationPrincipal User user, @RequestBody @Valid UpdateUsernameRequest request){
+        userService.update(user.getId(), request.getUsername());
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal User user){
+        userService.delete(user.getId());
+        return ResponseEntity.ok().build();
     }
 }
